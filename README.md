@@ -85,3 +85,121 @@ By combining the power of decentralized identity and blockchain with traditional
 
 ## Demo video
 https://www.loom.com/share/05e377af44174fc4b6e9823f67ba60e9?sid=06403338-0b7b-48ca-b0fa-bb3f1541aadb
+
+
+
+## How to setup and Run
+
+### Prerequisites
+
+Before you begin, ensure you have:
+
+- Raspberry Pi running Raspbian OS
+- Compatible WiFi adapter for the Raspberry Pi
+- Internet connection for initial setup
+- Node.js installed for the backend services
+- Packages: **OpenNDS**, **hostapd**, **dnsmasq**, **Node.js**
+
+---
+
+### Step 1: Update and Install Required Packages
+
+First, update your package list and install the necessary tools:
+
+```bash
+sudo apt-get update
+sudo apt-get install hostapd dnsmasq opennds
+
+Enable hostapd and dnsmasq:
+
+sudo systemctl unmask hostapd
+sudo systemctl enable hostapd
+sudo systemctl enable dnsmasq
+
+### Step 2: Configure hostapd
+
+Configure hostapd to turn your Raspberry Pi into a WiFi hotspot:
+
+sudo nano /etc/hostapd/hostapd.conf
+
+Add the following configuration:
+
+interface=wlan0
+driver=nl80211
+ssid=nifiPortal
+hw_mode=g
+channel=7
+wmm_enabled=0
+macaddr_acl=0
+auth_algs=1
+ignore_broadcast_ssid=0
+
+Then, point hostapd to this config:
+
+sudo nano /etc/default/hostapd
+
+Set:
+DAEMON_CONF="/etc/hostapd/hostapd.conf"
+
+### Step 3: Configure DHCP Server with dnsmasq
+
+Configure dnsmasq for DHCP:
+
+sudo nano /etc/dnsmasq.conf
+
+Add the following:
+
+interface=wlan0
+dhcp-range=192.168.150.2,192.168.150.20,255.255.255.0,24h
+
+### Step 4: Assign Static IP to wlan0
+
+Assign a static IP address to wlan0:
+
+ADD:
+interface wlan0
+static ip_address=192.168.150.1/24
+
+
+### Step 5: Configure OpenNDS for Captive Portal
+
+Edit the OpenNDS configuration:
+
+sudo nano /etc/opennds/opennds.conf
+
+Set the following options for nifi:
+
+GatewayInterface=wlan0
+GatewayAddress=192.168.150.1
+ClientIdleTimeout=300
+fasport=3000
+fas_secure_enabled=1
+faskey=mysecretkey
+gatewayname=nifiPortal
+preauthenticated_users=allow tcp to 192.168.38.210 port 5002
+
+
+### Step 6: Install Node.js for Backend
+
+Install Node.js for the nifi backend:
+
+Clone the backend repository:
+
+git clone https://github.com/mbcse/nifi.git
+cd nifi
+npm install
+npm start
+
+### Step 8: Start Services
+Start the services to make your Raspberry Pi a functional WiFi access point with captive portal:
+
+sudo systemctl start hostapd
+sudo systemctl start dnsmasq
+sudo systemctl start opennds
+
+
+
+
+
+
+
