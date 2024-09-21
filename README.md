@@ -16,6 +16,9 @@ As the demand for decentralized identity solutions grows, traditional WiFi netwo
 
 ## Technical Implementation
 
+![Raspberrypi](./raspberrypi.jpg)
+
+
 **Hardware & Platform:**
 - **Raspberry Pi**: Acts as the central gateway running OpenNDS for managing the captive portal.
 - **OpenNDS**: Handles the network access and communicates with Nifi to determine whether access should be granted or denied.
