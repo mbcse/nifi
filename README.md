@@ -16,7 +16,7 @@ As the demand for decentralized identity solutions grows, traditional WiFi netwo
 
 ## Technical Implementation
 
-![Raspberrypi](./raspberrypi.jpg)
+![Raspberrypi](raspberrypi.JPG)
 
 
 **Hardware & Platform:**
