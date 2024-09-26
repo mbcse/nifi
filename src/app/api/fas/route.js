@@ -50,7 +50,7 @@ export async function POST(req) {
     try {
       const balance = await contract.balanceOf(userAddress, tokenId);
       console.log(parseInt(balance))
-      if (parseInt(balance) > 1) {
+      if (parseInt(balance) < 1) {
         return NextResponse.json({ message: "Auth failed: You don't have the required NFT" }, { status: 403 });
       }
   
